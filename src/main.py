@@ -33,23 +33,18 @@ class AppWindow(QMainWindow):
 		print("IP : ",ipStr, " | Port : ",portInt)
 
 		self.thread = ServerThread(ipStr,portInt)
-		self.thread.finished.connect(app.exit)
-		self.thread.start()
-		
 
-class ServerThread(QThread):
+
+class ServerThread():
 	def __init__(self,ip,port):
 		super().__init__()
-		self.tcpServer = QTcpServer(self)
+		self.tcpServer = QTcpServer()
 		address = QHostAddress(ip)
 		if not self.tcpServer.listen(address, port):
 			print("cant listen!")
 			self.close()
 			return
 		self.tcpServer.newConnection.connect(self.dealCommunication)
-
-	def __del__(self):
-		self.wait()
 
 	def dealCommunication(self):
 		# Get a QTcpSocket from the QTcpServer
@@ -76,8 +71,6 @@ class ServerThread(QThread):
 		# We are using PyQt5 so set the QDataStream version accordingly.
 		out.setVersion(QDataStream.Qt_5_0)
 		out.writeUInt16(0)
-		# this is the message we will send it could come from a widget.
-		message = "Goodbye!"
 		# get a byte array of the message encoded appropriately.
 		message = bytes(message, encoding='ascii')
 		# now use the QDataStream and write the byte array to it.
