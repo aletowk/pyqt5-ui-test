@@ -13,42 +13,44 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="serverConfigWidget">
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>20</y>
-      <width>331</width>
-      <height>131</height>
+      <x>70</x>
+      <y>180</y>
+      <width>411</width>
+      <height>51</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="serverSettingsLayout">
-     <item row="1" column="0">
-      <widget class="QLineEdit" name="lineEdit_2">
+     <item row="0" column="0">
+      <widget class="QLineEdit" name="ipLineEdit">
        <property name="text">
-        <string>IP</string>
+        <string>127.0.0.1</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_3">
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="portLineEdit">
        <property name="text">
-        <string>PORT</string>
+        <string>5505</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="pushButton">
+     <item row="0" column="2">
+      <widget class="QPushButton" name="openConnectionButton">
        <property name="text">
-        <string>Set</string>
+        <string>OpenConnection</string>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="3" alignment="Qt::AlignVCenter">
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="text">
-        <string>IP And Port Configuration</string>
+       <property name="checkable">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
