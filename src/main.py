@@ -1,13 +1,10 @@
 #!/usr/bin/python3
-
-import sys
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow 
-from PyQt5.QtCore import QThread, QByteArray, QDataStream, QIODevice
+import time
+import sys,os
+from PyQt5.QtWidgets import QApplication, QMainWindow 
 from gui.MainUI import Ui_MainWindow
 
-from PyQt5.QtNetwork import QHostAddress, QTcpServer
-
-from Utils.ServerManager import ServerManager
+from Utils.ServerManager import ServerThread
 
 class AppWindow(QMainWindow):
 	def __init__(self):
@@ -16,74 +13,38 @@ class AppWindow(QMainWindow):
 		self.ui.setupUi(self)
 		self.linkFunctionsToActions()
 
-
-		self.show()
-
-	def quitAction(self):
-		sys.exit(app.exec_())
+		self.tcpServerThread = None
 
 	def linkFunctionsToActions(self):
-		self.ui.actionQuit.triggered.connect(self.quitAction)
 		self.ui.openConnectionButton.clicked.connect(self.openConnection)
+		self.ui.closeConnectionButton.clicked.connect(self.closeConnection)
+
+	def closeConnection(self):
+		print("Closing server ")
+		if self.tcpServerThread:
+			if self.tcpServerThread.isRunning():
+				print("Thread in running...")
+				self.tcpServerThread.closeAllTCPClient()
+				self.tcpServerThread.tcpServer.close()
+				self.tcpServerThread.exit()
 
 	def openConnection(self):
-		print("Pushed")
 		ipStr = self.ui.ipLineEdit.text()
 		portInt = int(self.ui.portLineEdit.text())
 		print("IP : ",ipStr, " | Port : ",portInt)
 
-		self.thread = ServerThread(ipStr,portInt)
-
-
-class ServerThread():
-	def __init__(self,ip,port):
-		super().__init__()
-		self.tcpServer = QTcpServer()
-		address = QHostAddress(ip)
-		if not self.tcpServer.listen(address, port):
-			print("cant listen!")
-			self.close()
-			return
-		self.tcpServer.newConnection.connect(self.dealCommunication)
-
-	def dealCommunication(self):
-		# Get a QTcpSocket from the QTcpServer
-		clientConnection = self.tcpServer.nextPendingConnection()
-		blockToWrite = self.writeMessageToData("Bye Bye")
-		# wait until the connection is ready to read
-		clientConnection.waitForReadyRead()
-		# read incomming data
-		instr = clientConnection.readAll()
-		# in this case we print to the terminal could update text of a widget if we wanted.
-		print(str(instr, encoding='ascii'))
-		# get the connection ready for clean up
-		clientConnection.disconnected.connect(clientConnection.deleteLater)
-		# now send the QByteArray.
-		clientConnection.write(blockToWrite)
-		# now disconnect connection.
-		clientConnection.disconnectFromHost()
-
-	def writeMessageToData(self,message):
-		# instantiate a QByteArray
-		block = QByteArray()
-		# QDataStream class provides serialization of binary data to a QIODevice
-		out = QDataStream(block, QIODevice.ReadWrite)
-		# We are using PyQt5 so set the QDataStream version accordingly.
-		out.setVersion(QDataStream.Qt_5_0)
-		out.writeUInt16(0)
-		# get a byte array of the message encoded appropriately.
-		message = bytes(message, encoding='ascii')
-		# now use the QDataStream and write the byte array to it.
-		out.writeString(message)
-		out.device().seek(0)
-		out.writeUInt16(block.size() - 2)
-		return block		
-
+		if self.tcpServerThread is None:
+			self.tcpServerThread = ServerThread(ipStr,portInt,self.ui.consoleViewTextEdit)
+		else:
+			del self.tcpServerThread
+			self.tcpServerThread = ServerThread(ipStr,portInt,self.ui.consoleViewTextEdit)
+		self.tcpServerThread.start()
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	win = AppWindow()
 	
+	print(os.getpid())
+
 	win.show()
 	app.exec_()
-	sys.exit(app.exec_())

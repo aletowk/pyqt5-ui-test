@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'MainUI.ui'
+# Form implementation generated from reading ui file './MainUI.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.2
 #
@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
         self.serverConfigWidget = QtWidgets.QWidget(MainWindow)
         self.serverConfigWidget.setObjectName("serverConfigWidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.serverConfigWidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(70, 180, 411, 51))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(360, 10, 431, 111))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.serverSettingsLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.serverSettingsLayout.setContentsMargins(0, 0, 0, 0)
@@ -34,6 +34,13 @@ class Ui_MainWindow(object):
         self.openConnectionButton.setCheckable(False)
         self.openConnectionButton.setObjectName("openConnectionButton")
         self.serverSettingsLayout.addWidget(self.openConnectionButton, 0, 2, 1, 1)
+        self.closeConnectionButton = QtWidgets.QPushButton(self.gridLayoutWidget)
+        self.closeConnectionButton.setCheckable(False)
+        self.closeConnectionButton.setObjectName("closeConnectionButton")
+        self.serverSettingsLayout.addWidget(self.closeConnectionButton, 1, 2, 1, 1)
+        self.consoleViewTextEdit = QtWidgets.QTextEdit(self.serverConfigWidget)
+        self.consoleViewTextEdit.setGeometry(QtCore.QRect(40, 300, 731, 271))
+        self.consoleViewTextEdit.setObjectName("consoleViewTextEdit")
         MainWindow.setCentralWidget(self.serverConfigWidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
@@ -58,6 +65,7 @@ class Ui_MainWindow(object):
         self.ipLineEdit.setText(_translate("MainWindow", "127.0.0.1"))
         self.portLineEdit.setText(_translate("MainWindow", "5505"))
         self.openConnectionButton.setText(_translate("MainWindow", "OpenConnection"))
+        self.closeConnectionButton.setText(_translate("MainWindow", "CloseConnection"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
         self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+W"))

@@ -17,10 +17,10 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>180</y>
-      <width>411</width>
-      <height>51</height>
+      <x>360</x>
+      <y>10</y>
+      <width>431</width>
+      <height>111</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="serverSettingsLayout">
@@ -54,7 +54,27 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="closeConnectionButton">
+       <property name="text">
+        <string>CloseConnection</string>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
+   </widget>
+   <widget class="QTextEdit" name="consoleViewTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>300</y>
+      <width>731</width>
+      <height>271</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

@@ -1,33 +1,45 @@
-import socket
-import struct
-import sys
+from PyQt5.QtCore import QThread
+from PyQt5.QtNetwork import QHostAddress, QTcpServer
 
-class ServerManager():
-	"""docstring for ServerManager"""
-	def __init__(self,host,port,buffSize):
-		self.host = host
-		self.port = port
-		self.bufferSize = buffSize
-		self.server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-		self.connectionArray = []
+class ServerThread(QThread):
+	def __init__(self,ip,port,textEditCSView):
+		super().__init__()
+		self.tcpServer = QTcpServer()
+		self.clientList = []
+		address = QHostAddress(ip)
+		if not self.tcpServer.listen(address, port):
+			print("cant listen!")
+			self.tcpServer.close()
+			return
+		self.tcpServer.newConnection.connect(self.addConnection)
+		self.console = textEditCSView
 	
-	def open(self):
-		try:
-			self.server.bind((self.host, self.port))
-			self.server.listen(1)
-			conn, addr = self.server.accept()
-			print("Connection from ",conn);
-			self.connectionArray.append(conn);
-		except:
-			print("Execption : ",sys.exc_info()[0])
-	
-	def close(self):
-		for el in self.connectionArray:
-			el.close();
+	def run(self):
+		while True:
+			for conn in self.clientList:
+				self.echoConnection(conn)
+		self.closeAllTCPClient()
 
-	def fromByteToArray(byteArr):
-		toReturn = []
-		for el in byteArr:
-			print("Elem is ",el)
-			toReturn.append(struct.unpack('B',el)[0])
-		return toReturn
+	def addConnection(self):
+		connectionToAdd = self.tcpServer.nextPendingConnection()
+		self.clientList.append(connectionToAdd)
+
+	def echoConnection(self,clientConnection):
+		readData = self.readFromTCPSocket(clientConnection)
+		print("[HOST] Received from ",clientConnection.localAddress().toString(),clientConnection.localPort())
+		print(readData)
+		self.console.append(str(readData,encoding='ascii'))
+		clientConnection.write(readData)
+
+	def readFromTCPSocket(self,tcpSocket):
+		tcpSocket.waitForReadyRead()
+		data = tcpSocket.readAll()
+		return data
+
+	def closeAllTCPClient(self):
+		for conn in self.clientList:
+			conn.disconnectFromHost()
+
+	def readNewConnection(self):
+		conn = self.tcpServer.nextPendingConnection()
+		self.echoConnection(conn)
