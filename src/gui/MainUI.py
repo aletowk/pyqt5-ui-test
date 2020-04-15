@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './MainUI.ui'
+# Form implementation generated from reading ui file 'MainUI.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.2
 #
@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(801, 600)
         self.serverConfigWidget = QtWidgets.QWidget(MainWindow)
         self.serverConfigWidget.setObjectName("serverConfigWidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.serverConfigWidget)
@@ -38,12 +38,35 @@ class Ui_MainWindow(object):
         self.closeConnectionButton.setCheckable(False)
         self.closeConnectionButton.setObjectName("closeConnectionButton")
         self.serverSettingsLayout.addWidget(self.closeConnectionButton, 1, 2, 1, 1)
-        self.consoleViewTextEdit = QtWidgets.QTextEdit(self.serverConfigWidget)
-        self.consoleViewTextEdit.setGeometry(QtCore.QRect(40, 300, 731, 271))
-        self.consoleViewTextEdit.setObjectName("consoleViewTextEdit")
+        self.consoleParentWidget = QtWidgets.QWidget(self.serverConfigWidget)
+        self.consoleParentWidget.setGeometry(QtCore.QRect(30, 280, 751, 271))
+        self.consoleParentWidget.setObjectName("consoleParentWidget")
+        self.plainTextEditConsoleex = QtWidgets.QPlainTextEdit(self.serverConfigWidget)
+        self.plainTextEditConsoleex.setGeometry(QtCore.QRect(60, 120, 104, 70))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(115, 210, 22))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(115, 210, 22))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(190, 190, 190))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(239, 235, 231))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        self.plainTextEditConsoleex.setPalette(palette)
+        self.plainTextEditConsoleex.setObjectName("plainTextEditConsoleex")
         MainWindow.setCentralWidget(self.serverConfigWidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 801, 22))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")

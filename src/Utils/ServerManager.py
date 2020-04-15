@@ -1,20 +1,24 @@
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtNetwork import QHostAddress, QTcpServer
 
 class ServerThread(QThread):
-	def __init__(self,ip,port,textEditCSView):
+	def __init__(self,ip,port,console):
 		super().__init__()
+		self.ip = ip
+		self.port = port
 		self.tcpServer = QTcpServer()
 		self.clientList = []
-		address = QHostAddress(ip)
-		if not self.tcpServer.listen(address, port):
+		address = QHostAddress(self.ip)
+		if not self.tcpServer.listen(address, self.port):
 			print("cant listen!")
 			self.tcpServer.close()
 			return
 		self.tcpServer.newConnection.connect(self.addConnection)
-		self.console = textEditCSView
-	
+		self.receviedDataSignal =  pyqtSignal(str)
+		# This generate error Attribue No attribute connect ! 
+		# self.receviedDataSignal.connect(console.receivePacket)
 	def run(self):
+		self.tcpServer.moveToThread(self.thread())
 		while True:
 			for conn in self.clientList:
 				self.echoConnection(conn)
@@ -28,8 +32,8 @@ class ServerThread(QThread):
 		readData = self.readFromTCPSocket(clientConnection)
 		print("[HOST] Received from ",clientConnection.localAddress().toString(),clientConnection.localPort())
 		print(readData)
-		self.console.append(str(readData,encoding='ascii'))
-		clientConnection.write(readData)
+		# Add write to our console
+		# self.receviedDataSignal.emit(readData)
 
 	def readFromTCPSocket(self,tcpSocket):
 		tcpSocket.waitForReadyRead()
